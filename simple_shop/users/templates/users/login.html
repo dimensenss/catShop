@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <form action="{% url 'users:login' %}" method="post">
+
+                    <h2 class="text-center">{{ title }}</h2>
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Будь ласка, введіть правильні ім'я користувача та пароль. Зауважте, що обидва поля чутливі
+                            до регістру.
+                        </div>
+                    {% endif %}
+                    {% csrf_token %}
+                    {% if request.GET.next %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Нікнейм або Email</label>
+
+                        <input type="text" class="form-control" name="username" id="id_username"
+                               placeholder="Введіть ваш нік або пошту" required
+                               value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" name="password" id="id_password"
+                               placeholder="Введіть ваш пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Вхід</button>
+
+
+                    <div class="d-flex justify-content-between mt-4 text-end">
+                        <p>Нема акаунта? </br> <a class="a-blue" href="{% url 'users:signup' %} ">Зареєструватися</a>
+                        </p>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock content %}

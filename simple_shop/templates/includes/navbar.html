@@ -1,0 +1,54 @@
+{% load static carts_tags %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'goods:main' %}">Головна</a>
+        <a class="navbar-brand" href="{% url 'goods:catalog' %}">Каталог</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% user_carts request as carts %}
+                <li class="nav-item">
+                    <a class="nav-link" type="button" data-bs-toggle="modal"
+                           data-bs-target="#cart-modal" href="#">Кошик <span class="goods-in-cart-count text-secondary">{% if carts.total_quantity %}{{ carts.total_quantity }}{% endif %}</span> </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Контакты</a>
+                </li>
+                {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:signup' %}">Реєстарція</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">Вхід</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:logout' %}">Вихід</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content cart-modal">
+            <div class="modal-header cart-header d-flex justify-content-between mx-3">
+                <h5 class="modal-title modal-cart-title" id="exampleModalLabel2">Кошик</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-0">
+                <div class="container cart-items-container cart-body">
+                    {% include 'carts/includes/included_cart.html' %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

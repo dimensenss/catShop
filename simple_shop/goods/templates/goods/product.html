@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+
+            <!-- Main product image -->
+            <div class="col-md-6">
+                <div class="main-product-image">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/500{% endif %}">
+                </div>
+            </div>
+            <!-- Right column for product details -->
+            <div class="col-md-6">
+                <div class="product-info">
+                    <h2>{{ product.title }}</h2>
+                    <p class="mb-0"><span class="price-new">{{ product.price }} грн</span></p>
+                    <p>{{ product.description }}</p>
+
+                    <!-- Buttons -->
+                    <div class="mt-3">
+                       {% if product.quantity > 0 %}
+                                            <a href="{% url 'carts:cart_add' %}"
+                                               class="btn btn-success add-to-cart"
+                                               data-product-id= {{ product.id }}>
+                                                {% csrf_token %}
+                                                До кошика
+                                            </a>
+                                        {% else %}
+                                            <button type="button" class="btn btn-secondary disabled" disabled>До
+                                                кошика
+                                            </button>
+
+                                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

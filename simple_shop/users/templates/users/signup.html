@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <form action="{% url 'users:signup' %}" method="post">
+                <h2 class="text-center">{{title}}</h2>
+                {% csrf_token %}
+
+            <div class="mb-3">
+                    {% if form.username.errors %}
+                    <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <span class="form-error-1 text-center">{{ form.username.errors }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="hidden" class="form-control" name="username" value = "{% if form.email.value %}{{form.email.value}}{% endif %}" id="id_username"
+                           placeholder="Введіть ваше ім'я" required>
+              </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {% if form.email.errors %}
+                   <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <div class="form-error-1 text-center">{{ form.email.errors }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="email" class="form-control" name="email" value = "{% if form.email.value %}{{form.email.value}}{% endif %}" id="id_email"
+                           placeholder="Введіть вашу пошту" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">Ім'я</label>
+                    {% if form.first_name.errors %}
+                    <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <span class="form-error-1 text-center">{{ form.first_name.errors }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="text" class="form-control" name="first_name" value = "{% if form.first_name.value %} {{form.first_name.value}} {% endif %}" id="id_first_name"
+                           placeholder="Введіть ваше ім'я">
+                </div>
+
+
+                <div class="mb-3">
+                <label for="id_last_name" class="form-label">Прізвище</label>
+                    {% if form.last_name.errors %}
+                    <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <span class="form-error-1 text-center">{{ form.last_name.errors }}</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="text" class="form-control" name="last_name" value = "{% if form.last_name.value %} {{form.last_name.value}} {% endif %}" id="id_last_name"
+                           placeholder="Введіть ваше прізвище">
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_password1" class="form-label">Введіть пароль</label>
+                    {% if form.password1.errors %}
+                   <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <div class="form-error-1 text-center">{{ form.password1.errors }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="password" class="form-control" name="password1" id="id_password1"
+                           placeholder="Введіть пароль" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_password2" class="form-label">Повторіть пароль</label>
+                   {% if form.password2.errors %}
+                   <div class="alert alert-danger alert-dismissible pb-0" role="alert">
+                        <div class="form-error-1 text-center">{{ form.password2.errors }}</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <input type="password" class="form-control" name="password2" id="id_password2"
+                           placeholder="Повторіть пароль" required>
+                </div>
+
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success ">Регістрація</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

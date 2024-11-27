@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_app
+    volumes:
+      - .:/app
+    environment:
+        - DB_HOST=database
+        - DB_NAME=docker_db1
+        - DB_USER=docker_db_user
+        - DB_PASS=root
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - database
+    command: python manage.py runserver 0.0.0.0:8000
+
+  database:
+    image: postgres:14.6-alpine3.16
+    environment:
+      - POSTGRES_DB=docker_db1
+      - POSTGRES_USER=docker_db_user
+      - POSTGRES_PASSWORD=root
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  celery:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    depends_on:
+      - web-app
+      - database
+      - rabbitmq
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=database
+      - DB_NAME=docker_db1
+      - DB_USER=docker_db_user
+      - DB_PASS=root
+

@@ -1,0 +1,83 @@
+{% load static %}
+{% load carts_tags %}
+
+{% user_carts request as carts %}
+
+<!-- Разметка корзины -->
+{% if carts %}
+    {% for cart in carts %}
+            <div class="cart-product">
+                <div class="cart-product-title d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center" style="height: 50px;">
+                       <h5 class="card-title m-0">{{ cart.product.title }}</h5>
+                        <a href="{% url 'carts:cart_remove' %}" class="a-dark remove-from-cart"
+                       data-cart-id="{{ cart.id }}">
+                        {% csrf_token %}
+                            <i class="fa-solid fa-trash text-dark"></i>
+                        </a>
+                    </div>
+                    <hr/>
+                </div>
+                <ul class="list-group list-group-flush cart-product-body">
+                    <li class="list-group-item cart-product-info">
+                        <div class="row text-center d-flex align-items-center px-3">
+                            <div class="col-4 col-sm-3 p-0">
+                                <a href="{% url 'goods:product' cart.product.slug  %}">
+                                    <img src="{{ cart.product.image.url }}"
+                                         alt="{{ cart.product_slug }}" class="img-fluid" style="width: 200px; height: 200px;">
+                                </a>
+                            </div>
+                            <div class="col-5 col-sm-3 p-0">
+                                <div class="input-group d-flex justify-content-center">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-dark btn-sm decrement cart-btn-dec" disabled
+                                                data-cart-id="{{ cart.id }}"
+                                                data-cart-change-url="{% url 'carts:cart_change' %} ">{% csrf_token %} <p>-</p>
+                                        </button>
+                                    </span>
+                                    <input name="cart_quantity" type="text" class="form-control number text-center cart-quantity" disabled
+                                               value="{{ cart.quantity }}">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-dark btn-sm increment cart-btn-inc" disabled
+                                                data-cart-id="{{ cart.id }}"
+                                                data-cart-change-url="{% url 'carts:cart_change' %} ">{% csrf_token %} <p>+</p>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="d-none d-sm-flex col-sm-3 p-0 cart-product-text d-flex justify-content-start fs-5"><small> x {{ cart.product.calculate_sell_price }} ₴</small>
+                            </div>
+                            <div class="col-3 col-sm-3 p-0 cart-product-text d-flex justify-content-end fs-4">{{ cart.product_price }} ₴</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        {% endfor %}
+{% endif %}
+
+
+<div class="card shadow-lg cart-footer">
+    <div class="card-footer d-flex flex-column p-0">
+        <div class="cart-total my-3 mx-2">
+            <p class="fs-4">Усього {{ carts.total_quantity }} товар(ів) на суму {{ carts.total_price }} ₴</p>
+        </div>
+        <div class="d-flex justify-content-center mb-3">
+            <a class="btn border rounded me-3 px-3 fs-5" role="button" onclick="closeModalOrRedirect()">Продовжити покупки</a>
+            {% if carts and not order %}
+                <a class="btn border rounded fs-5 px-3" href="{% url 'orders:create_order' %}"
+                role="button">Оформити замовлення</a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+<script>
+    function closeModalOrRedirect() {
+        if ($('#cart-modal').hasClass('show')) {
+            $('#cart-modal').modal('hide');
+        } else {
+            window.location.href = "{% url 'goods:main' %}";
+        }
+    }
+</script>

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <!-- Заголовок сторінки -->
+            <h1 class="display-5 text-success">Дякуємо за Ваше замовлення!</h1>
+            <p class="lead">Ваше замовлення успішно оформлено. Ми зв'яжемося з вами найближчим часом для підтвердження деталей.</p>
+
+            <!-- Іконка успішного замовлення -->
+            <div class="my-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="currentColor" class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM3.707 7.293a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.414 0l6-6a1 1 0 0 0-1.414-1.414L6 9.586 3.707 7.293z"/>
+                </svg>
+            </div>
+
+            <!-- Інформація про замовлення -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Деталі замовлення</h5>
+                    <p class="card-text">Номер замовлення: <strong>{{ order.id }}</strong></p>
+                     <p class="card-text">Усього товарів: <strong>{{ orders.first.orderitem_set.total_quantity }} </strong></p>
+                    <p class="card-text">Дата замовлення: <strong>{{ order.created_timestamp }}</strong></p>
+                    <p class="card-text">Cтатус замовлення: <strong>{{ order.status }}</strong></p>
+
+                    <p class="card-text">Сума до сплати: <strong>{{ orders.first.orderitem_set.total_price }} </strong></p>
+
+                </div>
+            </div>
+
+            <!-- Дії користувача -->
+            <div class="d-flex justify-content-center">
+                <a href="/" class="btn btn-primary me-3">Перейти на головну</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
